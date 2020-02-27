@@ -13,6 +13,11 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->group(function(){
+	Route::get('/user', function (Request $request) { //for test
+	    return $request->user();
+	});
+	Route::resource('post','PostController')->only(['store','destroy']);
+	Route::resource('comment','CommentController')->only(['store','update','destroy']);
+	Route::resource('user','UserController')->only(['update','destroy']);
 });
