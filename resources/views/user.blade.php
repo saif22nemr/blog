@@ -158,10 +158,13 @@ use Carbon\Carbon;
 					cache: false,
 					success: function(data, status, xhr){
 						makeNotefication('<h6>Successfull Update</h6>');
+						thisTag.parent().addClass('edit');
 						thisTag.parent().text(data['data'][thisTag.prop('name')]);
+
 					},
 					error: function(xhr, status, message){
 						makeNotefication('<h6>Fail Edit</h6><div>- Error Message: '+message+'</div>',5000);
+						thisTag.parent().addClass('edit');
 						thisTag.parent().text(thisTag.data('back'));
 					}
 				});
@@ -183,10 +186,12 @@ use Carbon\Carbon;
 					makeNotefication('<h6>Successfull Update</h6>');
 					if(data['data'][thisTag.prop('name')] == 2) var group = 'Admin';
 					else var group = 'Client';
+					thisTag.parent().addClass('edit');
 					thisTag.parent().text(group);
 				},
 				error: function(xhr, status, message){
 					makeNotefication('<h6>Fail Edit</h6><div>- Error Message: '+message+'</div>',5000);
+					thisTag.parent().addClass('edit');
 					thisTag.parent().text(thisTag.data('back'));
 				}
 			});
