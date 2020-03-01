@@ -26,8 +26,8 @@ class DatabaseSeeder extends Seeder
         Post::flushEventListeners();
         Comment::flushEventListeners();
 
-        factory(User::class,50)->create();
-        factory(Post::class,200)->create();
-        factory(Comment::class,1100)->create();
+        factory(User::class,1000)->create();
+        factory(Post::class,3000)->create();
+        factory(Comment::class,5000)->create();
     }
 }

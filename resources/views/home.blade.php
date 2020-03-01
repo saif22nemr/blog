@@ -44,9 +44,7 @@ use Carbon\Carbon;
                             </div>
                             @endif
                         </div>
-                        <div class="post-content clearfix">
-                            {{$post->body}}
-                        </div>
+                        <div class="post-content clearfix">{{$post->body}}</div>
                         <div class="post-image">
                             <img src="{{asset('storage')}}/{{$post->image}}">
                         </div>
