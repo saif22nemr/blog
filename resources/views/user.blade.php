@@ -26,10 +26,10 @@ use Carbon\Carbon;
 	                    		<select name="order" class="form-control text-left">
 	                    			<option value="asc" <?php if($order == 'asc') echo 'selected';?>>Asc</option>
 	                    			<option value="desc" <?php if($order == 'desc') echo 'selected';?>>Desc</option>
-	                    			
+
 	                    		</select>
                     		</div>
-                    	</div>        
+                    	</div>
                     	<div class="col-md-6 search-part ">
                     		<div class="row text-right">
                     			<div class="col-md-3">
@@ -44,8 +44,8 @@ use Carbon\Carbon;
 	                    			<input type="search" name="search" placeholder="Search ..." class="form-control">
 	                    		</div>
                     		</div>
-                    		
-                    	</div>        
+
+                    	</div>
                     </div>
 				</form>
 			</div>
@@ -110,6 +110,7 @@ use Carbon\Carbon;
 		//delete user
 		$('.user').on('click','.delete-user > a',function(e){
 			e.preventDefault();
+            if(confirm('Are you sure to delete this user?')){
 			var thisTag = $(this);
 			$.ajax({
 				url: "{{url('api/user')}}/"+thisTag.data('id'),
@@ -125,9 +126,34 @@ use Carbon\Carbon;
 					makeNotefication('<h6>Fail delete</h6><div>Error Message:  '+message+'</div>');
 				},
 			});
+            }
 		});//end delete user
 		//start process edit user
 		$('tbody tr').on('click','.edit',function(){
+
+            var val = $('input.edit-user');
+            console.log(val);
+            var column = val.prop('name');
+            var data = {_method:'PATCH'};
+            data[column] = val.val();
+            console.log(val.parent().parent().data('id'));
+            $.ajax({
+                url:"{{url('api/user')}}/"+val.parent().parent().data('id'),
+                method: 'POST',
+                headers: {'Authorization': 'Bearer {{Auth()->user()->api_token}}','Accept' : 'application/json'},
+                data: data,
+                cache: false,
+                success: function(data, status, xhr){
+                    makeNotefication('<h6>Successfull Update</h6>');
+                    val.parent().addClass('edit');
+                    val.parent().text(data['data'][val.prop('name')]);
+                },
+                error: function(xhr, status, message){
+                    makeNotefication('<h6>Fail Edit</h6><div>- Error Message: '+message+'</div>',5000);
+                    val.parent().addClass('edit');
+                    val.parent().text(val.data('back'));
+                }
+            });
 			var thisTag = $(this);
 			if(thisTag.data('column') == 'group'){
 				console.log('val: '+thisTag.text()+' -> length: '+thisTag.text().length);
@@ -137,9 +163,9 @@ use Carbon\Carbon;
 				if(thisTag.data('group') == 1) content += ' selected ';
 				content += '>Client</option></select>';
 			}else{
-				var content = '<input type="text" name="'+thisTag.data('column')+'" class="form-control edit-user input" data-back="'+thisTag.text()+'" value="'+thisTag.text()+'">';	
+				var content = '<input type="text" name="'+thisTag.data('column')+'" class="form-control edit-user input" data-back="'+thisTag.text()+'" value="'+thisTag.text()+'">';
 			}
-			
+
 			thisTag.html(content);
 			thisTag.removeClass('edit');
 		});
@@ -160,7 +186,6 @@ use Carbon\Carbon;
 						makeNotefication('<h6>Successfull Update</h6>');
 						thisTag.parent().addClass('edit');
 						thisTag.parent().text(data['data'][thisTag.prop('name')]);
-
 					},
 					error: function(xhr, status, message){
 						makeNotefication('<h6>Fail Edit</h6><div>- Error Message: '+message+'</div>',5000);
@@ -169,6 +194,8 @@ use Carbon\Carbon;
 					}
 				});
 			}
+		});
+        $('body').on('click',function(e){
 		});
 		$('tbody tr').on('change','select.input',function(e){
 			var thisTag = $(this);
@@ -197,6 +224,6 @@ use Carbon\Carbon;
 			});
 		});
 	});
-	
+
 </script>
 @endsection

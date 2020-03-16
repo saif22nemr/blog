@@ -167,7 +167,6 @@ use Carbon\Carbon;
                         'Authorization': 'Bearer {{Auth()->user()->api_token}}',
                         'Accept' : 'application/json',
                 };
-
                 var formData = new FormData($('#create-post')[0]);
                 $.ajax({
                     url: '{{route("post.store")}}',
